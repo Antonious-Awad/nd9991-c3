@@ -31,21 +31,21 @@ jobs:
       # - run: return 1
       # - destroy_environment
 
-  # configure_infrastructure:
-  #   docker:
-  #     - image: python:3.7-alpine3.11
-  #   steps:
-  #     - checkout
-  #     - add_ssh_keys:
-  #         fingerprints: [8f:55:25:87:a6:6b:f8:66:a9:28:1b:91:99:f4:af:ba]
-  #     - run:
-  #         name: install ansible
-  #         command: |
-  #           apk add --update ansible
-  #     - run:
-  #         name: Run playbook and Configure Server
-  #         command: |
-  #           ansible-playbook main.yml -i inventory
+  configure_infrastructure:
+    docker:
+      - image: python:3.7-alpine3.11
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints: [8f:55:25:87:a6:6b:f8:66:a9:28:1b:91:99:f4:af:ba]
+      - run:
+          name: install ansible
+          command: |
+            apk add --update ansible
+      - run:
+          name: Run playbook and Configure Server
+          command: |
+            ansible-playbook main.yml -i inventory
   smoke_test:
     docker:
       - image: alpine:latest
@@ -72,7 +72,7 @@ jobs:
             aws cloudformation deploy \
             --template-file bucket.yml \
             --stack-name stack-create-bucket-${CIRCLE_WORKFLOW_ID:0:7} \
-            --parameter-overrides MyBucketName= "mybucket-${CIRCLE_WORKFLOW_ID:0:7}"
+            --parameter-overrides MyBucketName="mybucket-${CIRCLE_WORKFLOW_ID:0:7}"
       - run: aws s3 sync . s3://mybucket-${CIRCLE_WORKFLOW_ID:0:7} --delete
 
   get_last_deployment_id:
