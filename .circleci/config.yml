@@ -85,7 +85,7 @@ jobs:
           name: fetch and save old pipeline ID (bucket name) responsible
           command: |
             aws cloudformation \
-            list-exports --query "Exports[?Name==\'PipelineID\'].Value" \
+            list-exports --query "Exports[?Name==\`PipelineID\`].Value" \
             --no-paginate --output text > ~/textfile.txt
       - persist_to_workspace:
           root: ~/
